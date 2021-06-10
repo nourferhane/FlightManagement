@@ -17,7 +17,6 @@ export class FlightComponent {
     public flights: Flight[];
     public flightNew: Flight;
     public flightToAdd: FlightToAdd;
-    private datas : Datas;
     constructor(private airplaneService: AirplaneService,private airportsService: AirportsService, private flightService: FlightService) {
       this.flightToAdd = this.getDefaultFlight();
       this.getFlights();

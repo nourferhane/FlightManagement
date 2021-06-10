@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Airplane } from 'src/Models/Airplane';
 import { Airport } from 'src/Models/Airport';
-import { Flight } from 'src/Models/Flight';
+import { Flight, FlightToAdd } from 'src/Models/Flight';
 import { AirplaneService } from 'src/Services/airplane.service';
 import { AirportsService } from 'src/Services/airports.service';
 import { FlightService } from 'src/Services/flight.service';
@@ -15,6 +15,7 @@ import { FlightService } from 'src/Services/flight.service';
 
 export class FlightDetailComponent implements OnInit {
   @Input('flight') flight : Flight;
+  flightNew : FlightToAdd;
   departAirpot : Airport;
   destinationAirport : Airport;
   airports : Airport[];
@@ -23,9 +24,10 @@ export class FlightDetailComponent implements OnInit {
 
   constructor(private airplaneService: AirplaneService,private flightService: FlightService, private route:ActivatedRoute, private airpotService: AirportsService, private airportsService: AirportsService) {
 
+    
     this.getAirports();
     this.getAirplanes();
-    //console.log(this.flight.departureAirportCode);
+    //this.getAirportByRef(this.flight.arrivalAirportCode);
     //this.departAirpot = this.getAirportByRef(this.flight.departureAirportCode);
    // this.destinationAirport = this.getAirportByRef(this.flight.arrivalAirportCode);
    }
