@@ -27,5 +27,11 @@ namespace FlightManagement.Services.FlightService
         /// <returns></returns>
         Flight GetFlightByReference(string reference);
 
+        /// <summary>
+        /// Removes the specified reference.
+        /// </summary>
+        /// <param name="reference">The reference.</param>
+        void Remove(string reference);
+
     }
 }

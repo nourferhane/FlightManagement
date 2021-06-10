@@ -50,5 +50,14 @@ namespace FlightManagement.Data.Sql
         {
             throw new NotImplementedException();
         }
+
+        public void DeleteByCode(string code)
+        {
+            var item = GetByCode(code);
+            if (item != null)
+            {
+                _context.Flights.Remove(item);
+            }
+        }
     }
 }

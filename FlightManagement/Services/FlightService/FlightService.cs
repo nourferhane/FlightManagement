@@ -47,5 +47,10 @@ namespace FlightManagement.Services.FlightService
         {
             return _flightsRepository.GetByCode(reference);
         }
+
+        public void Remove(string reference)
+        {
+            _flightsRepository.DeleteByCode(reference);
+        }
     }
 }

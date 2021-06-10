@@ -19,14 +19,15 @@ export class FlightDetailComponent implements OnInit {
   destinationAirport : Airport;
   airports : Airport[];
   airplanes : Airplane[];
+  isValide = true;
 
   constructor(private airplaneService: AirplaneService,private flightService: FlightService, private route:ActivatedRoute, private airpotService: AirportsService, private airportsService: AirportsService) {
 
     this.getAirports();
     this.getAirplanes();
-    console.log(this.flight);
+    //console.log(this.flight.departureAirportCode);
     //this.departAirpot = this.getAirportByRef(this.flight.departureAirportCode);
-    //this.destinationAirport = this.getAirportByRef(this.flight.arrivalAirportCode);
+   // this.destinationAirport = this.getAirportByRef(this.flight.arrivalAirportCode);
    }
 
   ngOnInit(): void {
@@ -34,12 +35,20 @@ export class FlightDetailComponent implements OnInit {
 
   }
   DepartChange(event) {
-    console.log(this.flight.departureAirportCode);
+    console.log(event);
+    this.flight.departureAirportCode = event;
 }
 
 DestinationChange(event) {
+  console.log(event + "--" + this.flight.departureAirportCode);
  if(this.flight.departureAirportCode == event)
- alert('depart airport cannot be the same as destination !');
+ {
+  alert('depart airport cannot be the same as destination !');
+  this.isValide = false;
+ }
+ else{
+  this.isValide = true
+ }
 
 }
   getFlight(): void{
@@ -65,6 +74,8 @@ DestinationChange(event) {
   }
 
   delete(){
-
+  console.log(this.flight.reference);
+  this.flightService.RemoveFlight(this.flight.reference);
+  this.getFlight();
   }
 }

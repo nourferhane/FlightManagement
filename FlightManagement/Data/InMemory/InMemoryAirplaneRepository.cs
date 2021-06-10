@@ -38,6 +38,15 @@ namespace FlightManagement.Data.InMemory
             return Airplanes.FirstOrDefault(a => a.Name == name);
         }
 
+        public void DeleteByCode(string code)
+        {
+            var item = GetByCode(code);
+            if (item != null)
+            {
+                Airplanes.Remove(item);
+            }
+        }
+
         /// <summary>
         /// Gets the by code.
         /// </summary>

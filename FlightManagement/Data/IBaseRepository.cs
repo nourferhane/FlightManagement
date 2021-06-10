@@ -30,6 +30,12 @@ namespace FlightManagement.Data
         /// <returns></returns>
         TModel GetByName(string name);
 
+        /// <summary>
+        /// Deletes the by code.
+        /// </summary>
+        /// <param name="code">The code.</param>
+        void DeleteByCode(string code);
+
 
     }
 }

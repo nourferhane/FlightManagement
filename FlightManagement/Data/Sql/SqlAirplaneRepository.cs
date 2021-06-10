@@ -40,6 +40,19 @@ namespace FlightManagement.Data.Sql
             return _context.Planes.FirstOrDefault(a => a.Name == name);
         }
 
+        /// <summary>
+        /// Deletes the by code.
+        /// </summary>
+        /// <param name="code">The code.</param>
+        public void DeleteByCode(string code)
+        {
+            var item = GetByCode(code);
+            if (item != null)
+            {
+                _context.Planes.Remove(item);
+            }
+        }
+
         public Airplane GetByCode(string code)
         {
            return  _context.Planes.FirstOrDefault(a => a.Code == code);

@@ -30,6 +30,10 @@ label {
     cursor: auto;
   }
 .btn{
-    margin-left: 3em;
-    margin-right: 3em;
+    margin-left: 0em;
+    margin-right: 1em;
+}
+
+.card{
+  width : 20em;
 }

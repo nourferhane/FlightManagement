@@ -67,5 +67,14 @@ namespace FlightManagement.Data.InMemory
         {
             throw new NotImplementedException();
         }
+
+        public void DeleteByCode(string code)
+        {
+            var item = GetByCode(code);
+            if (item != null)
+            {
+                Flights.Remove(item);
+            }
+        }
     }
 }

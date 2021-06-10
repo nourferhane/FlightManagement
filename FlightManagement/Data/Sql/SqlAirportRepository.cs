@@ -39,5 +39,19 @@ namespace FlightManagement.Data.Sql
         {
             return _context.Airports.FirstOrDefault(a => a.Name == name);
         }
+
+        /// <summary>
+        /// Deletes the by code.
+        /// </summary>
+        /// <param name="code">The code.</param>
+        public void DeleteByCode(string code)
+        {
+            var item = GetByCode(code);
+            if (item != null)
+            {
+                _context.Airports.Remove(item);
+
+            }
+        }
     }
 }

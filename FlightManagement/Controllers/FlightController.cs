@@ -125,6 +125,35 @@ namespace FlightManagement.Controllers
             return Ok(dto);
         }
 
+        /// <summary>
+        /// Updates the flight.
+        /// </summary>
+        /// <param name="dto">The dto.</param>
+        /// <returns></returns>
+        [HttpPatch]
+        public IActionResult UpdateFlight(FlightDto dto)
+        {
+            // todo
+            return Ok();
+        }
+
+        /// <summary>
+        /// Deletes the flight.
+        /// </summary>
+        /// <param name="reference">The reference.</param>
+        /// <returns></returns>
+        [HttpDelete("{reference}")]
+        public IActionResult DeleteFlight(string reference)
+        {
+            var item = _flightService.GetFlightByReference(reference);
+            if (item == null)
+            {
+                return NotFound();
+            }
+            _flightService.Remove(reference);
+            return Ok();
+        }
+
 
 
         /// <summary>

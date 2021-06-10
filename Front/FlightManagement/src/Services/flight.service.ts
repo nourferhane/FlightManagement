@@ -41,6 +41,15 @@ export class FlightService {
     );
   }
 
+  RemoveFlight(reference :string) {
+    this.http.delete(this.uri+'flight/'+reference)
+    .subscribe({
+        error: error => {
+            console.error('There was an error!', error);
+        }
+    });
+  }
+
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
 
