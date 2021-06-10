@@ -15,18 +15,12 @@ namespace FlightManagement.Controllers
     public class AirplaneController : ControllerBase
     {
         /// <summary>
-        /// The logger
-        /// </summary>
-        private readonly ILogger<AirplaneController> _logger;
-
-        /// <summary>
         /// The airplane service
         /// </summary>
         private readonly IBaseRepository<Airplane> _airplaneService;
 
-        public AirplaneController(ILogger<AirplaneController> logger, IBaseRepository<Airplane> airplaneService)
+        public AirplaneController( IBaseRepository<Airplane> airplaneService)
         {
-            _logger = logger;
             _airplaneService = airplaneService;
         }
 

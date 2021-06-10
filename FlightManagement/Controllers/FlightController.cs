@@ -20,24 +20,24 @@ namespace FlightManagement.Controllers
         /// <summary>
         /// The air plane service
         /// </summary>
-        private IBaseRepository<Airplane> _airPlaneService;
+        private IAirPlaneService _airPlaneService;
 
         /// <summary>
         /// The flight service
         /// </summary>
-        private IBaseRepository<Flight> _flightService;
+        private IFlightService _flightService;
 
         /// <summary>
         /// The airport service
         /// </summary>
-        private IBaseRepository<Airport> _airportService;
+        private IAirportService _airportService;
 
         /// <summary>
         /// The GPS service
         /// </summary>
         private readonly IGpsService _gpsService;
 
-        public FlightController(IBaseRepository<Airplane> airPlaneService, IBaseRepository<Flight> flightService, IGpsService gpsService, IBaseRepository<Airport> airportService)
+        public FlightController(IAirPlaneService airPlaneService, IFlightService flightService, IGpsService gpsService, IAirportService airportService)
         {
             _flightService = flightService;
             _airPlaneService = airPlaneService;
@@ -55,7 +55,7 @@ namespace FlightManagement.Controllers
         public IEnumerable<FlightDto> GetFlight()
         {
             List<FlightDto> flishtList = new List<FlightDto>();
-            var flights = _flightService.GetAll();
+            var flights = _flightService.GetFlights();
             foreach (var flight in flights)
             {
                 flishtList.Add(FlightMapper(flight));
@@ -72,22 +72,33 @@ namespace FlightManagement.Controllers
         public IActionResult AddFlight(Flight flight)
         {
             if (flight == null) return BadRequest();
-            var airportDepart = _airportService.GetByCode(flight.AeroportDepartCode);
-            var airportDestination = _airportService.GetByCode(flight.AeroportDestinationCode);
-            var airplane = _airPlaneService.GetByCode(flight.AirplaneCode);
-            var distance = _gpsService.GetDistance(airportDepart.Latitude, airportDepart.Longitude,
+            Airport airportDepart = _airportService.GetByCode(flight.AeroportDepartCode);
+            Airport airportDestination = _airportService.GetByCode(flight.AeroportDestinationCode);
+            Airplane airplane = _airPlaneService.GetByCode(flight.AirplaneCode);
+
+            if (airplane == null || airportDestination == null || airportDepart == null)
+            {
+                return BadRequest();
+            }
+
+
+            if (string.Equals(airportDestination.Code, airportDepart.Code, StringComparison.CurrentCultureIgnoreCase))
+            {
+                return BadRequest();
+            }
+
+            double distance = _gpsService.GetDistance(airportDepart.Latitude, airportDepart.Longitude,
                 airportDestination.Latitude, airportDestination.Longitude);
             var travelTime = distance / airplane.MaxSpeed;
-            var fuelAfterTakeOff = airplane.MaxFuel - airplane.MaxFuel * (airplane.TakeOffFuelConsumption / 100.0);
-            var tripFuel = fuelAfterTakeOff - travelTime * airplane.ConsumptionPerHour;
-           
-            if (tripFuel <= 0)
+
+            if (IsAirplaneFuelEnoughForTrip(airplane, distance, travelTime))
             {
                 return BadRequest("fuel not enough !!");
             }
+
             flight.Distance = distance;
             flight.ArrivalTime = flight.DepartureTime.Add(TimeSpan.FromHours(travelTime));
-            _flightService.Add(flight);
+            _flightService.AddFlight(flight);
             return Ok();
 
         }
@@ -97,15 +108,16 @@ namespace FlightManagement.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("{reference}")]
-        public ActionResult<FlightDto> GetFlightbyReference(string reference)
+        public IActionResult GetFlightbyReference(string reference)
         {
-            var flight = _flightService.GetByCode(reference);
-            var depart = _airportService.GetByCode(flight.AeroportDepartCode);
-            var destination = _airportService.GetByCode(flight.AeroportDestinationCode);
+            var flight = _flightService.GetFlightByReference(reference);
             if (flight is null)
             {
                 return NotFound();
             }
+            var depart = _airportService.GetByCode(flight.AeroportDepartCode);
+            var destination = _airportService.GetByCode(flight.AeroportDestinationCode);
+           
 
             var dto = FlightMapper(flight);
             dto.AirportDepart = depart.Name;
@@ -136,5 +148,12 @@ namespace FlightManagement.Controllers
             return tmp;
         }
 
+        private bool IsAirplaneFuelEnoughForTrip(Airplane airplane, double distance, double travelTime)
+        {
+            var fuelAfterTakeOff = airplane.MaxFuel - airplane.MaxFuel * (airplane.TakeOffFuelConsumption / 100.0);
+            var tripFuel = fuelAfterTakeOff - travelTime * airplane.ConsumptionPerHour;
+
+            return tripFuel > 0;
+        }
     }
 }
