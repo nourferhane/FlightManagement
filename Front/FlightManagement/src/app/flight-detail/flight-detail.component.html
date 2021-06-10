@@ -1,0 +1,22 @@
+<div class="container" *ngIf="flight">
+
+    <div class="container">
+        <div class="col-sm-2"><label for="flight.reference">Reference: {{flight.reference}}</label></div> 
+
+        <div class="col-sm-4 ">Departure
+            <select name="departureAirport" [(ngModel)]="flight.departureAirportCode" #t (change)="DepartChange(t.value)" class="form-control" required>
+                <option *ngFor="let a of airports" [value]="a.code">{{a.name}}</option>
+            </select>
+        </div>
+        <div class="col-sm-4">Destination
+            <select name="departureAirport" [(ngModel)]="flight.arrivalAirportCode" #t (change)="DestinationChange(t.value)" class="form-control" required>
+                <option *ngFor="let a of airports" [value]="a.code">{{a.name}}</option>
+            </select>
+        </div>
+        <div ><button class="btn btn-primary" routerLink="/fulldetails/{{flight.reference}}" >details</button>
+        <button class="btn btn-danger" (click)= "delete()">delete</button></div> 
+
+
+    </div>
+
+</div>

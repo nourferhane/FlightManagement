@@ -29,7 +29,7 @@ namespace FlightManagement.Services.AirplaneService
         /// <returns></returns>
         public IEnumerable<Airplane> GetPlanes()
         {
-            return _airplaneRepository.GetPlanes();
+            return _airplaneRepository.GetAll();
         }
 
         /// <summary>

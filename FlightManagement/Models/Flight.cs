@@ -95,7 +95,12 @@ namespace FlightManagement.Models
         [JsonIgnore]
         public Airplane Airplane { get; set; }
 
-        
+        /// <summary>
+        /// Gets or sets the airplane code.
+        /// </summary>
+        /// <value>
+        /// The airplane code.
+        /// </value>
         public string AirplaneCode { get; set; }
     }
 }

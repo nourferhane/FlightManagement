@@ -12,7 +12,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FlightManagement.Data;
+using FlightManagement.Data.InMemory;
 using FlightManagement.Data.Sql;
+using FlightManagement.Models;
 using FlightManagement.Services.AirplaneService;
 using FlightManagement.Services.AirportService;
 using FlightManagement.Services.FlightService;
@@ -48,7 +50,26 @@ namespace FlightManagement
             services.AddScoped<IAirportRepository, SqlAirportRepository>();
             services.AddScoped<IAirportService, AirportService>();
             services.AddScoped<IAirPlaneService, AirplaneService>();
+
+            services.AddSingleton<IBaseRepository<Airplane>, InMemoryAirplaneRepository>();
+            services.AddSingleton<IBaseRepository<Flight>, InMemoryFlightRepository>();
+            services.AddSingleton<IBaseRepository<Airport>, InMemoryAirportRepository>();
+
+
             services.AddDbContext<DataContext>(op => op.UseSqlServer(Configuration.GetConnectionString("SqlConnectionString")));
+            services.AddCors();
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll", p =>
+                {
+                    p.AllowAnyOrigin()
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                });
+            });
+            services.AddMvc();
+            services.AddRouting(r => r.SuppressCheckForUnhandledSecurityMetadata = true);
 
         }
 
@@ -68,10 +89,14 @@ namespace FlightManagement
 
             app.UseAuthorization();
 
+            app.UseCors("AllowAll");
+           
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
+
         }
     }
 }

@@ -22,9 +22,9 @@ namespace FlightManagement.Controllers
         /// <summary>
         /// The airplane service
         /// </summary>
-        private readonly IAirPlaneService _airplaneService;
+        private readonly IBaseRepository<Airplane> _airplaneService;
 
-        public AirplaneController(ILogger<AirplaneController> logger, IAirPlaneService airplaneService)
+        public AirplaneController(ILogger<AirplaneController> logger, IBaseRepository<Airplane> airplaneService)
         {
             _logger = logger;
             _airplaneService = airplaneService;
@@ -38,7 +38,7 @@ namespace FlightManagement.Controllers
         [Route("/Airplanes")]
         public IEnumerable<Airplane> GetAllAirplanes()
         {
-            return _airplaneService.GetPlanes();
+            return _airplaneService.GetAll();
         }
 
         /// <summary>

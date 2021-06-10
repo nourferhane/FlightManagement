@@ -30,7 +30,7 @@ namespace FlightManagement.Services.AirportService
         /// <returns></returns>
         public Airport GetByCode(string code)
         {
-            return _airportRepository.GetAirportbyCode(code);
+            return _airportRepository.GetByCode(code);
         }
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace FlightManagement.Services.AirportService
         /// <returns></returns>
         public IEnumerable<Airport> GetAll()
         {
-            return _airportRepository.GetAirports();
+            return _airportRepository.GetAll();
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace FlightManagement.Services.AirportService
         /// <param name="airport"></param>
         public void AddAirport(Airport airport)
         {
-            _airportRepository.AddAirport(airport);
+            _airportRepository.Add(airport);
         }
 
     }

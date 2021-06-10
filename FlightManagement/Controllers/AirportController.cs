@@ -3,8 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using FlightManagement.Data;
 using FlightManagement.Models;
 using FlightManagement.Services.AirportService;
+using Microsoft.AspNetCore.Cors;
 
 namespace FlightManagement.Controllers
 {
@@ -12,8 +14,9 @@ namespace FlightManagement.Controllers
     [Route("[controller]")]
     public class AirportController : Controller
     {
-        private readonly IAirportService _airportService;
-        public AirportController(IAirportService airportService)
+        private readonly IBaseRepository<Airport> _airportService;
+
+        public AirportController(IBaseRepository<Airport> airportService)
         {
             _airportService = airportService;
         }
@@ -23,6 +26,7 @@ namespace FlightManagement.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
+        [Route("/Airports")]
         public ActionResult<Airport> GetAirports()
         {
             var airports = _airportService.GetAll();
@@ -63,7 +67,7 @@ namespace FlightManagement.Controllers
             {
                 return BadRequest();
             }
-            _airportService.AddAirport(airport);
+            _airportService.Add(airport);
 
             return Ok();
         }

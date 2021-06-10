@@ -31,7 +31,7 @@ namespace FlightManagement.Services.FlightService
         /// <returns></returns>
         public IEnumerable<Flight> GetFlights()
         {
-           return _flightsRepository.GetFlights();
+           return _flightsRepository.GetAll();
         }
 
         /// <summary>
@@ -40,12 +40,12 @@ namespace FlightManagement.Services.FlightService
         /// <param name="flight">The flight.</param>
         public void AddFlight(Flight flight)
         {
-            _flightsRepository.AddFlight(flight);
+            _flightsRepository.Add(flight);
         }
 
         public Flight GetFlightByReference(string reference)
         {
-            return _flightsRepository.GetFlightByRef(reference);
+            return _flightsRepository.GetByCode(reference);
         }
     }
 }

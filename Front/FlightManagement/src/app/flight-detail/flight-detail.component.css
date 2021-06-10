@@ -1,0 +1,35 @@
+@import "~bootstrap/dist/css/bootstrap.css";
+
+label {
+    display: inline-block;
+    margin: .5em 0;
+    color: #607D8B;
+    color: rgb(241, 33, 6);
+    font-weight: bold;
+  }
+  input {
+    height: 2em;
+    font-size: 1em;
+    padding-left: .4em;
+  }
+  button {
+    margin-top: 20px;
+    font-family: Arial;
+    background-color: #eee;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer; cursor: hand;
+  }
+  button:hover {
+    background-color: #cfd8dc;
+  }
+  button:disabled {
+    background-color: #eee;
+    color: #ccc;
+    cursor: auto;
+  }
+.btn{
+    margin-left: 3em;
+    margin-right: 3em;
+}

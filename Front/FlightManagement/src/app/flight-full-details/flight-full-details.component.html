@@ -1,0 +1,17 @@
+
+<div  *ngIf="flight">
+    <div class="card" style="width: 18rem;">
+        <div class="card-body">
+          <h5 class="card-title">Reference :{{flight.reference}}</h5>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">Distance : {{flight.distance}}</li>
+          <li class="list-group-item">Airport departure :{{flight.airportDepart}}</li>
+          <li class="list-group-item">Airport destination :{{flight.airportDestination}} </li>
+          <li class="list-group-item">Departure Time :{{flight.departureTime | date : 'dd/MM/yyyy HH:MM'}}</li>
+          <li class="list-group-item">Arrival Time :{{flight.arrivalTime | date : 'dd/MM/yyyy HH:MM'}}</li>
+
+        </ul>
+
+      </div>
+    </div>

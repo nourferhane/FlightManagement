@@ -21,34 +21,34 @@ namespace FlightManagement.Data.Sql
         {
             _context = context;
         }
-
+        
         /// <summary>
-        /// Initializes a new instance of the <see cref="IFlightRepository" /> interface.
-        /// </summary>
-        /// <param name="flight">The flight.</param>
-        public void AddFlight(Flight flight)
-        {
-            _context.Add(flight);
-            _context.SaveChanges();
-        }
-
-        /// <summary>
-        /// Gets the flights.
+        /// Gets all.
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<Flight> GetFlights()
+        public IEnumerable<Flight> GetAll()
         {
             return _context.Flights.ToList();
         }
 
         /// <summary>
-        /// Gets the flight by reference.
+        /// Adds the specified model to add.
         /// </summary>
-        /// <param name="reference">The reference.</param>
-        /// <returns></returns>
-        public Flight GetFlightByRef(string reference)
+        /// <param name="modelToAdd">The model to add.</param>
+        public void Add(Flight modelToAdd)
         {
-            return _context.Flights.FirstOrDefault(f => f.Reference == reference);
+            _context.Add(modelToAdd);
+            _context.SaveChanges();
+        }
+
+        public Flight GetByCode(string code)
+        {
+            return _context.Flights.FirstOrDefault(f => f.Reference == code);
+        }
+
+        public Flight GetByName(string name)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -24,7 +24,7 @@ namespace FlightManagement.Data.Sql
         /// Gets the planes.
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<Airplane> GetPlanes()
+        public IEnumerable<Airplane> GetAll()
         {
             return _context.Planes.ToList();
         }

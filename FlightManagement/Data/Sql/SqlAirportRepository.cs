@@ -18,25 +18,26 @@ namespace FlightManagement.Data.Sql
         {
             _context = context;
         }
-        public IEnumerable<Airport> GetAirports()
+
+        public IEnumerable<Airport> GetAll()
         {
             return _context.Airports.ToList();
         }
 
-        public Airport GetAirportbyName(string name)
+        public void Add(Airport modelToAdd)
         {
-            return _context.Airports.FirstOrDefault(a => a.Name == name);
+            _context.Airports.Add(modelToAdd);
+            _context.SaveChanges();
         }
 
-        public Airport GetAirportbyCode(string code)
+        public Airport GetByCode(string code)
         {
             return _context.Airports.FirstOrDefault(a => a.Code == code);
         }
 
-        public void AddAirport(Airport airport)
+        public Airport GetByName(string name)
         {
-            _context.Airports.Add(airport);
-            _context.SaveChanges();
+            return _context.Airports.FirstOrDefault(a => a.Name == name);
         }
     }
 }

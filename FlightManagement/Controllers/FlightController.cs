@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using FlightManagement.Data;
+using FlightManagement.Dtos;
 using FlightManagement.Models;
 using FlightManagement.Services.AirplaneService;
 using FlightManagement.Services.AirportService;
@@ -18,24 +20,24 @@ namespace FlightManagement.Controllers
         /// <summary>
         /// The air plane service
         /// </summary>
-        private IAirPlaneService _airPlaneService;
+        private IBaseRepository<Airplane> _airPlaneService;
 
         /// <summary>
         /// The flight service
         /// </summary>
-        private IFlightService _flightService;
+        private IBaseRepository<Flight> _flightService;
 
         /// <summary>
         /// The airport service
         /// </summary>
-        private IAirportService _airportService;
+        private IBaseRepository<Airport> _airportService;
 
         /// <summary>
         /// The GPS service
         /// </summary>
         private readonly IGpsService _gpsService;
 
-        public FlightController(IAirPlaneService airPlaneService, IFlightService flightService, IGpsService gpsService, IAirportService airportService)
+        public FlightController(IBaseRepository<Airplane> airPlaneService, IBaseRepository<Flight> flightService, IGpsService gpsService, IBaseRepository<Airport> airportService)
         {
             _flightService = flightService;
             _airPlaneService = airPlaneService;
@@ -49,9 +51,17 @@ namespace FlightManagement.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public IEnumerable<Flight> GetFlight()
+        [Route("/Flights")]
+        public IEnumerable<FlightDto> GetFlight()
         {
-            return _flightService.GetFlights();
+            List<FlightDto> flishtList = new List<FlightDto>();
+            var flights = _flightService.GetAll();
+            foreach (var flight in flights)
+            {
+                flishtList.Add(FlightMapper(flight));
+            }
+
+            return flishtList;
         }
 
         /// <summary>
@@ -77,7 +87,7 @@ namespace FlightManagement.Controllers
             }
             flight.Distance = distance;
             flight.ArrivalTime = flight.DepartureTime.Add(TimeSpan.FromHours(travelTime));
-            _flightService.AddFlight(flight);
+            _flightService.Add(flight);
             return Ok();
 
         }
@@ -86,16 +96,44 @@ namespace FlightManagement.Controllers
         /// Gets the flight.
         /// </summary>
         /// <returns></returns>
-        [HttpGet]
-        public ActionResult<Flight> GetFlightbyReference(string reference)
+        [HttpGet("{reference}")]
+        public ActionResult<FlightDto> GetFlightbyReference(string reference)
         {
-            var flight = _flightService.GetFlightByReference(reference);
+            var flight = _flightService.GetByCode(reference);
+            var depart = _airportService.GetByCode(flight.AeroportDepartCode);
+            var destination = _airportService.GetByCode(flight.AeroportDestinationCode);
             if (flight is null)
             {
                 return NotFound();
             }
 
-            return Ok(flight);
+            var dto = FlightMapper(flight);
+            dto.AirportDepart = depart.Name;
+            dto.AirportDestination = destination.Name;
+            return Ok(dto);
+        }
+
+
+
+        /// <summary>
+        /// Flights the mapper.
+        /// </summary>
+        /// <param name="dto">The dto.</param>
+        /// <returns></returns>
+        private static FlightDto FlightMapper(Flight dto)
+        {
+            FlightDto tmp = new FlightDto
+            {
+                Reference = dto.Reference,
+                Distance = dto.Distance,
+                ArrivalTime = dto.ArrivalTime,
+                AeroportDepartCode = dto.AeroportDepartCode,
+                AeroportDestinationCode = dto.AeroportDestinationCode,
+                DepartureTime = dto.DepartureTime,
+                AirplaneCode = dto.AirplaneCode
+            };
+
+            return tmp;
         }
 
     }
